@@ -1,10 +1,10 @@
-       IDENTIFICATION DIVISION.
+IDENTIFICATION DIVISION.
        PROGRAM-ID. STUDENT-PARKING-SYSTEM.
 
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT PARKING-FILE ASSIGN TO "C:\PUPTrack\PARKING.dat"
+           SELECT PARKING-FILE ASSIGN TO "C:\Users\zyra\Desktop\PUPTrack"
                ORGANIZATION IS LINE SEQUENTIAL.
 
        DATA DIVISION.
@@ -203,6 +203,7 @@
            END-PERFORM.
 
        SAVE-TO-FILE.
+           DISPLAY "Saving records to file..."
            OPEN OUTPUT PARKING-FILE
            PERFORM VARYING DB-INDEX FROM 1 BY 1 UNTIL DB-INDEX >
            MAX-RECORDS
@@ -215,6 +216,8 @@
                    MOVE DB-ENTRY-TIME(DB-INDEX) TO TIME-OF-ENTRY
                    MOVE DB-EXIT-TIME(DB-INDEX) TO TIME-OF-EXIT
                    WRITE DATABASE-RECORD
+                   DISPLAY "Record written: " STUDENT-NUMBER
                END-IF
            END-PERFORM.
            CLOSE PARKING-FILE.
+           DISPLAY "Records saved successfully!"
