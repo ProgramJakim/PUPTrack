@@ -1,4 +1,4 @@
-IDENTIFICATION DIVISION.
+       IDENTIFICATION DIVISION.
        PROGRAM-ID. STUDENT-PARKING-SYSTEM.
 
        ENVIRONMENT DIVISION.
@@ -220,4 +220,4 @@ IDENTIFICATION DIVISION.
                END-IF
            END-PERFORM.
            CLOSE PARKING-FILE.
-           DISPLAY "Records saved successfully!"
+           DISPLAY "Records saved successfully!".
