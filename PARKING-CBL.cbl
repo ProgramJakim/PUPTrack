@@ -6,6 +6,8 @@
        FILE-CONTROL.
            SELECT PARKING-FILE ASSIGN TO "C:\PARKING.dat"
                ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT ASCII-ART-FILE ASSIGN TO "C:\PUPTRACT_ASCII ART.txt"
+               ORGANIZATION IS LINE SEQUENTIAL.
 
        DATA DIVISION.
        FILE SECTION.
@@ -18,6 +20,9 @@
            05  MOTORCYCLE-COLOR   PIC X(10).
            05  TIME-OF-ENTRY      PIC X(10).
            05  TIME-OF-EXIT       PIC X(10).
+
+       FD  ASCII-ART-FILE.
+       01  ASCII-ART-RECORD PIC X(80).
 
        WORKING-STORAGE SECTION.
        01  USER-INPUT.
@@ -48,13 +53,32 @@
            05  DATA-FULL           PIC X VALUE 'N'.
            05  EOF                 PIC X VALUE 'N'.
 
+       01  WS-DISPLAY-LINE PIC X(80).
+       01  WS-KEY-INPUT    PIC X.
+
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
+           PERFORM DISPLAY-ASCII-ART
            PERFORM INITIALIZE-DATA
-           PERFORM DISPLAY-MENU UNTIL OPTION = 6
+           PERFORM DISPLAY-MENU UNTIL OPTION = 7
            PERFORM SAVE-TO-FILE
            DISPLAY "THANK YOU FOR USING THE SYSTEM!".
            STOP RUN.
+
+       DISPLAY-ASCII-ART.
+           OPEN INPUT ASCII-ART-FILE
+           PERFORM UNTIL EOF = 'Y'
+               READ ASCII-ART-FILE INTO ASCII-ART-RECORD
+                   AT END
+                       MOVE 'Y' TO EOF
+                   NOT AT END
+                       DISPLAY ASCII-ART-RECORD
+               END-READ
+           END-PERFORM
+           CLOSE ASCII-ART-FILE
+           MOVE 'N' TO EOF.
+           DISPLAY "Press any key to continue..."
+           ACCEPT WS-KEY-INPUT.
 
        INITIALIZE-DATA.
            DISPLAY "Loading existing records...".
@@ -85,7 +109,8 @@
            DISPLAY "3 - Display Record".
            DISPLAY "4 - Exit Parking".
            DISPLAY "5 - Display All Records".
-           DISPLAY "6 - Exit Program".
+           DISPLAY "6 - Delete Record".
+           DISPLAY "7 - Exit Program".
            DISPLAY "Select an option: ".
            ACCEPT OPTION.
            EVALUATE OPTION
@@ -105,6 +130,9 @@
                PERFORM DISPLAY-ALL-RECORDS
                ACCEPT OMITTED
                WHEN 6
+               PERFORM DELETE-RECORD
+               ACCEPT OMITTED
+               WHEN 7
                DISPLAY "Exiting program..."
                ACCEPT OMITTED
                WHEN OTHER
@@ -188,6 +216,23 @@
                DISPLAY "Enter Exit Time: " ACCEPT TEMP-EXIT
                MOVE TEMP-EXIT TO DB-EXIT-TIME(DB-INDEX)
                DISPLAY "Exit recorded successfully!"
+           ELSE
+               DISPLAY "Record not found."
+           END-IF.
+
+       DELETE-RECORD.
+           DISPLAY "Enter Student Number to Delete: "
+           ACCEPT STUDENT-SEARCH
+           PERFORM SEARCH-RECORD
+           IF RECORD-FOUND = 'Y'
+               MOVE SPACES TO DB-STUDENT-NUMBER(DB-INDEX)
+               MOVE SPACES TO DB-STUDENT-NAME(DB-INDEX)
+               MOVE SPACES TO DB-MODEL(DB-INDEX)
+               MOVE SPACES TO DB-PLATE(DB-INDEX)
+               MOVE SPACES TO DB-COLOR(DB-INDEX)
+               MOVE SPACES TO DB-ENTRY-TIME(DB-INDEX)
+               MOVE SPACES TO DB-EXIT-TIME(DB-INDEX)
+               DISPLAY "Record deleted successfully!"
            ELSE
                DISPLAY "Record not found."
            END-IF.
