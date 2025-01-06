@@ -109,7 +109,7 @@
            DISPLAY "3 - Display Record".
            DISPLAY "4 - Exit Parking".
            DISPLAY "5 - Display All Records".
-           DISPLAY "6 - Delete Record".
+           DISPLAY "6 - Delete Parking Record".
            DISPLAY "7 - Exit Program".
            DISPLAY "Select an option: ".
            ACCEPT OPTION.
