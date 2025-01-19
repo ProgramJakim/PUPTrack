@@ -1,0 +1,4 @@
+Student Number	|Student Name	|Model	|License Plate	|Color	|Time of Entry	|Time off Exit	|
+--------------------------------
+2123-123123	|123	|123	|123123	|123123	|2024-05-15, 11: 49 PM	|-	|
+--------------------------------
